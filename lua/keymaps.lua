@@ -225,3 +225,61 @@ vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 
 -- noh
 keymap.set("n", "<leader>nh", ":noh<CR>", { desc = "No search highlight" })
+
+
+-- UPDATE 2025-01-17
+
+-- Git hunks
+vim.keymap.set("n", "g]", ":GitGutterNextHunk<CR>", {})
+vim.keymap.set("n", "g[", ":GitGutterPrevHunk<CR>", {})
+vim.keymap.set("n", "<leader>gp", ":GitGutterPreviewHunk<CR>", {})
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
+
+-- Big git blame toogle
+vim.keymap.set("n", "<leader>ggb", ":Git blame<CR>", {})
+
+
+-- copen
+keymap.set("n", "<leader>co", ":copen<CR>", { desc = "Open copen tab" })
+
+-- ripgrep
+vim.keymap.set("n", "<leader>grep", function()
+  -- Wstawia komendę do linii poleceń
+  vim.api.nvim_feedkeys(":grep '' **/*.py", "n", false)
+  -- Przesuwa kursor o dwa znaki w lewo, aby ustawić go pomiędzy cudzysłowiami
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Left><Left><Left><Left><Left><Left><Left><Left><Left>", true, false, true), "n", false)
+end, { desc = "Grep in Python files with cursor inside quotes" })
+
+-- select all
+keymap.set("n", "<C-x>", "ggVG", { desc = "Select whole file text" })
+
+-- In Visual mode, when pressing $, move to last letter/char.
+keymap.set("v", "$", "$h")
+
+--tego jednak nie
+-- Yank: Yanking goes to the end of selected text after yank.
+--keymap.set("v", "y", "y`]")
+
+--ZMIANA: TO JUŻ ISTNIEJE:
+-- Paste: Pasting in nvim doesn't remove value from register.
+--keymap.set("v", "p", '"_dp')
+
+-- vim pattern help
+-- https://vimhelp.org/pattern.txt.html#%2Fmagic
+
+-- highlit yanked txt
+--takie coś w init.lua:
+--vim.g.highlightedyank_highlight_duration = 100
+
+-- taki plik w plugins:
+-- highlite-yanked-text.lua
+-- jego treść:
+-- return {"machakann/vim-highlightedyank"}
+----------------------------------------
+-- w init.lua
+-- dodaj to:
+-- vim.cmd("set iskeyword-=_")
+-- to sprawi, że podkreślnik będzie przerywał np. klikanie "w" (przejście do następnego słowa)
+
+-- Select whote line from start to end
+vim.keymap.set("n", "<leader>ss", "^v$h")
