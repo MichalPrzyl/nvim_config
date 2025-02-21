@@ -7,8 +7,11 @@ vim.cmd("set relativenumber")
 vim.cmd("set ignorecase")
 vim.cmd("set smartcase")
 vim.cmd("set nowrap")
+-- vim.cmd("set iskeyword-=_")
+vim.cmd("set list")
 vim.g.netrw_banner = 0 -- Disable banner when opening Explore mode (just use <C-I> to enable it)
 vim.cmd("set updatetime=300")
+vim.g.highlightedyank_highlight_duration = 100
 -- vim.cmd("set autochdir") -- autochanging dir
 
 -- when starting vim, disable diagnostic
