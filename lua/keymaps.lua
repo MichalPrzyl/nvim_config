@@ -64,9 +64,6 @@ keymap.set("n", "<leader>de", function()
 	vim.diagnostic.enable()
 end, opts)
 
--- Pasting in nvim doesn't remove value from register.
-keymap.set("v", "<leader>p", '"_dP')
-
 -- harpoon
 local harpoon = require("harpoon")
 
@@ -80,7 +77,11 @@ vim.keymap.set("n", "<leader>ha", function() harpoon:list():append() end)
 vim.keymap.set("n", "<leader>h1", function() harpoon:list():select(1) end)
 vim.keymap.set("n", "<leader>h2", function() harpoon:list():select(2) end)
 vim.keymap.set("n", "<leader>h3", function() harpoon:list():select(3) end)
-vim.keymap.set("n", "<leader>h3", function() harpoon:list():select(4) end)
+vim.keymap.set("n", "<leader>h4", function() harpoon:list():select(4) end)
+vim.keymap.set("n", "<leader>h5", function() harpoon:list():select(5) end)
+vim.keymap.set("n", "<leader>h6", function() harpoon:list():select(6) end)
+vim.keymap.set("n", "<leader>h7", function() harpoon:list():select(7) end)
+vim.keymap.set("n", "<leader>h8", function() harpoon:list():select(8) end)
 
 -- Toggle previous & next buffers stored within Harpoon list
 vim.keymap.set("n", "<C-S-P>", function() harpoon:list():prev() end)
@@ -92,8 +93,6 @@ vim.keymap.set("n", "<leader>pr", "oprint(f\"\")<ESC>hhpa: {}<ESC>h\"0p")
 -- replace
 vim.keymap.set("n", "<leader>vp", "viwpyiw")
 
--- compile python
-vim.keymap.set("n", "<leader>pyt", "<CMD>ToggleTerm<CR>python3 mp_test.py<CR>")
 
 -- automatic sarch under cursor
 local telescope_builtin = require("telescope.builtin")
@@ -123,7 +122,6 @@ vim.keymap.set("n", "<leader>sur", "")
 -- Run python script
 vim.keymap.set("n", "<C-C><C-P>", ":w | !python3 '%:p'<CR>")
 vim.keymap.set("i", "<C-C><C-P>", "<ESC>:w | !python3 '%:p'<CR>")
-
 
 -- Run bash script
 vim.keymap.set("n", "<C-C><C-B>", ":w | !/bin/bash '%:p'<CR>")
@@ -155,11 +153,12 @@ end, { noremap = true, silent = true })
 -- Select whote line from start to end
 vim.keymap.set("n", "<leader>ss", "^v$h")
 
--- Move whole lines up and down
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==") -- move line up(n)
-vim.keymap.set("n", "<A-k>", ":m .-2<CR>==") -- move line down(n)
-vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv") -- move line up(v)
-vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
+-- -- Move whole lines up and down
+-- BUG: This was delaying something. You can check this out.
+-- vim.keymap.set("n", "<A-j>", ":m .+1<CR>==") -- move line up(n)
+-- vim.keymap.set("n", "<A-k>", ":m .-2<CR>==") -- move line down(n)
+-- vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv") -- move line up(v)
+-- vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
 
 -- Open Explorer
 vim.keymap.set("n", "<leader>e", ":Ex<CR>", {})
@@ -172,6 +171,14 @@ vim.keymap.set("n", "<leader>vs", ":Se<CR><C-w>x<C-W>j", {})
 
 -- Git blame toogle
 vim.keymap.set("n", "<leader>gb", ":GitBlameToggle<CR>", {})
+-- Big git blame toogle
+vim.keymap.set("n", "<leader>ggb", ":Git blame<CR>", {})
+
+-- Git hunks
+vim.keymap.set("n", "g]", ":GitGutterNextHunk<CR>", {})
+vim.keymap.set("n", "g[", ":GitGutterPrevHunk<CR>", {})
+vim.keymap.set("n", "<leader>gp", ":GitGutterPreviewHunk<CR>", {})
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
 
 -- navigating with ctrl + l/j/l/h
 vim.keymap.set("n", "<C-l>", "<C-w>l", {})
@@ -183,9 +190,6 @@ vim.keymap.set("n", "<C-k>", "<C-w>k", {})
 keymap.set("n", "L", "<cmd>tabn<CR>", { desc = "Go to next tab", noremap = true}) --  go to next tab
 keymap.set("n", "H", "<cmd>tabp<CR>", { desc = "Go to previous tab", noremap = true }) --  go to previous tab
 
--- remove whitespaces at the end of the lines
-keymap.set("v", "<leader>rw", ":s/\\s\\+$//<CR>", { desc = "Remove whitespaces at the end of the line", noremap = true })
-
 -- set cc=80
 keymap.set("n", "<leader>cc", ":set cc=80 <CR>", { desc = "Set cc=80", noremap = true })
 
@@ -195,16 +199,11 @@ keymap.set("v", "<leader>rw", ":s/\\s\\+$//<CR>", { desc = "Remove whitespaces a
 -- HopWord
 keymap.set("n", "s", ":HopWord<CR>", { desc = "HopWord Toggle", noremap = true })
 
-vim.fn.sign_define('DapBreakpoint', {text='🔴', texthl='', linehl='', numhl=''})
-vim.api.nvim_set_keymap('n', '<F5>', ":lua require'dap'.continue()<CR>", {noremap = true, silent = true})
+-- Telescope buffers
+vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
 
--- debugging python
--- set breakpoint
-vim.api.nvim_set_keymap('n', '<F9>', ":lua require'dap'.toggle_breakpoint()<CR>", {noremap = true, silent = true})
-
-vim.api.nvim_set_keymap('n', '<F10>', ":lua require'dap'.step_over()<CR>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<F11>', ":lua require'dap'.step_into()<CR>", {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<F12>', ":lua require'dap'.step_out()<CR>", {noremap = true, silent = true})
+-- HopWord
+keymap.set("n", "s", ":HopWord<CR>", { desc = "HopWord Toggle", noremap = true })
 
 -- Spectre
 vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
@@ -220,12 +219,26 @@ vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search(
     desc = "Search on current file"
 })
 
--- Telescope buffers
-vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")
+-- telescope file browser
+vim.keymap.set("n", "<space>fb", ":Telescope file_browser<CR>")
+-- open file_browser with the path of the current buffer
+-- vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
+
+
+
+-- debugging
+vim.fn.sign_define('DapBreakpoint', {text='🔴', texthl='', linehl='', numhl=''})
+vim.api.nvim_set_keymap('n', '<F5>', ":lua require'dap'.continue()<CR>", {noremap = true, silent = true})
+
+-- debugging python
+-- set breakpoint
+vim.api.nvim_set_keymap('n', '<F9>', ":lua require'dap'.toggle_breakpoint()<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<F10>', ":lua require'dap'.step_over()<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<F11>', ":lua require'dap'.step_into()<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<F12>', ":lua require'dap'.step_out()<CR>", {noremap = true, silent = true})
 
 -- noh
 keymap.set("n", "<leader>nh", ":noh<CR>", { desc = "No search highlight" })
-
 
 -- UPDATE 2025-01-17
 
@@ -234,10 +247,6 @@ vim.keymap.set("n", "g]", ":GitGutterNextHunk<CR>", {})
 vim.keymap.set("n", "g[", ":GitGutterPrevHunk<CR>", {})
 vim.keymap.set("n", "<leader>gp", ":GitGutterPreviewHunk<CR>", {})
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true })
-
--- Big git blame toogle
-vim.keymap.set("n", "<leader>ggb", ":Git blame<CR>", {})
-
 
 -- copen
 keymap.set("n", "<leader>co", ":copen<CR>", { desc = "Open copen tab" })
@@ -283,3 +292,8 @@ keymap.set("v", "$", "$h")
 
 -- Select whote line from start to end
 vim.keymap.set("n", "<leader>ss", "^v$h")
+
+
+
+-- compile python
+vim.keymap.set("n", "<leader>pyt", "<CMD>ToggleTerm<CR>python3 mp_test.py<CR>")
