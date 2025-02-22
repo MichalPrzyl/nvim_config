@@ -34,6 +34,7 @@ return {
 			-- In this case a note with the title 'My new note' will be given an ID that looks
 			-- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
 			local suffix = ""
+      print(title)
 			if title ~= nil then
 				-- If title is given, transform it into valid file name.
 				suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
@@ -44,17 +45,17 @@ return {
 				end
 			end
 			-- return tostring(os.time()) .. "-" .. suffix
-			return title
+			return suffix
 		end,
 
 		-- Optional, customize how note file names are generated given the ID, target directory, and title.
 		---@param spec { id: string, dir: obsidian.Path, title: string|? }
 		---@return string|obsidian.Path The full path to the new note.
-		note_path_func = function(spec)
-			-- This is equivalent to the default behavior.
-			local path = spec.dir / tostring(spec.id)
-			-- return path:with_suffix(".md")
-			return title:with_suffix(".xd")
-		end,
+
+    note_path_func = function(spec)
+      -- Sprawdzamy, czy spec.title istnieje, jeśli nie, używamy spec.id
+      local filename = (spec.title or spec.id):gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+      return (spec.dir / filename):with_suffix(".xd")
+    end,
 	},
 }
